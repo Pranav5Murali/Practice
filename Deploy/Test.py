@@ -2,8 +2,8 @@ import platform
 import os
 import socket
 import psutil
-
-def find_git_repositories(start_path='.'):
+print("start")
+def find_git_repositories(start_path='/home/user1'):
     """ Walk through directories starting from 'start_path' and find Git repositories """
     for dirpath, dirnames, filenames in os.walk(start_path):
         if '.git' in dirnames:  # Check if the directory contains a '.git' folder
