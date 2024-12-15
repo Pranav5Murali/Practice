@@ -1,4 +1,4 @@
-name: Remote Prechecks Workflow Bash3
+name: Remote Prechecks Workflow Bash4
 
 on:
   push:
