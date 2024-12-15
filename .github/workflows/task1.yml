@@ -1,0 +1,39 @@
+name: Remote Prechecks Workflow Bash2
+
+on:
+  push:
+    branches:
+      - Ubuntu
+
+jobs:
+  run-prechecks:
+    runs-on: self-hosted
+
+    environment: vm
+
+    steps:
+      # Step 1: Checkout the repository locally on the runner
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Clone the repository on the remote machine
+      - name: Clone Repo on Remote Machine
+        env:
+          SSH_PASSWORD: ${{ secrets.VM }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 << EOF
+          echo "Cloning the repository on the remote machine..."
+          cd /home/user1/target || mkdir -p /home/user1/target && cd /home/user1/target
+          git clone https://github.com/Pranav5Murali/Practice.git || echo "Repository already exists"
+          EOF
+
+      # Step 3: Execute the Python script on the remote machine
+      - name: Execute Python Script on Remote Machine
+        env:
+          SSH_PASSWORD: ${{ secrets.VM }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 << EOF
+          echo "Executing Python script on the remote machine..."
+          cd /home/user1/target/Practice/Deploy
+          python3 Test.py
+          EOF
