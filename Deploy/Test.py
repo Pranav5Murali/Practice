@@ -3,6 +3,13 @@ import os
 import socket
 import psutil
 
+def find_git_repositories(start_path='.'):
+    """ Walk through directories starting from 'start_path' and find Git repositories """
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        if '.git' in dirnames:  # Check if the directory contains a '.git' folder
+            print(f"Git repository found: {dirpath}")
+            break  # Stop after finding the first Git repo
+
 def get_system_info():
     # Create a dictionary to store the system information
     system_info = {}
@@ -35,6 +42,7 @@ def get_system_info():
 
     return system_info
 
+find_git_repositories()
 # Get and print the system info
 info = get_system_info()
 print(info)
