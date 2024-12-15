@@ -1,18 +1,40 @@
-from pathlib import Path
-import subprocess
+import platform
+import os
+import socket
+import psutil
 
-# Path to the cloned repository and the target Python script
-repo_path = Path("/home/user1/target/Practice/Deploy")  # Adjust the path as needed
-script_path = repo_path / "Test.py"
-print(f"The script path is {script_path}")
+def get_system_info():
+    # Create a dictionary to store the system information
+    system_info = {}
 
-# Ensure the script exists
-if script_path.exists() and script_path.is_file():
-    # Execute the script using subprocess
-    result = subprocess.run(["python3", str(script_path)], capture_output=True, text=True)
+    # Get hostname
+    system_info['hostname'] = socket.gethostname()
+
+    # Get OS details
+    system_info['os'] = platform.system()
+    system_info['os_version'] = platform.version()
+    system_info['os_release'] = platform.release()
+    system_info['os_distribution'] = platform.linux_distribution() if hasattr(platform, 'linux_distribution') else 'N/A'
+
+    # Get CPU information
+    system_info['cpu'] = platform.processor()
+    system_info['cpu_cores'] = psutil.cpu_count(logical=False)
+    system_info['logical_cpu_cores'] = psutil.cpu_count(logical=True)
     
-    # Print the script's output
-    print("Script Output:")
-    print(result.stdout)
-else:
-    print(f"Script {script_path} not found!")
+    # Get RAM information
+    system_info['total_memory'] = psutil.virtual_memory().total / (1024 ** 3)  # in GB
+    system_info['available_memory'] = psutil.virtual_memory().available / (1024 ** 3)  # in GB
+
+    # Get disk information
+    system_info['total_disk'] = psutil.disk_usage('/').total / (1024 ** 3)  # in GB
+    system_info['used_disk'] = psutil.disk_usage('/').used / (1024 ** 3)  # in GB
+    system_info['free_disk'] = psutil.disk_usage('/').free / (1024 ** 3)  # in GB
+
+    # Get IP address (just the local address for the VM)
+    system_info['ip_address'] = socket.gethostbyname(socket.gethostname())
+
+    return system_info
+
+# Get and print the system info
+info = get_system_info()
+print(info)
