@@ -41,9 +41,13 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 <<EOF
           cd /home/user1
-          if git clone https://github.com/Pranav5Murali/Practice.git; then
-            echo "Repository cloned successfully."
+          if [ -d "Practice" ]; then
+            echo "Repository already exists. Skipping clone."
           else
-            echo "Repository already exists or clone failed."
+            if git clone https://github.com/Pranav5Murali/Practice.git; then
+              echo "Repository cloned successfully."
+            else
+              echo "Failed to clone repository. Please check the URL or network connectivity."
+            fi
           fi
           EOF
