@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Run Prechecks on Remote Machine
+      - name: SSH Connection - Verify User and System Info
         env:
           SSH_PASSWORD: ${{ secrets.VM }}
         run: |
@@ -23,8 +23,27 @@ jobs:
           echo "Running commands on remote machine:"
           whoami
           ip a
-          # Navigate to the home directory or a specific folder
+          EOF
+
+      - name: SSH Connection - Navigate to Home Directory
+        env:
+          SSH_PASSWORD: ${{ secrets.VM }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 <<EOF
           cd /home/user1
-          # Clone the GitHub repository
-          git clone https://github.com/Pranav5Murali/Practice.git || echo "Repository already exists"
+          pwd
+          echo "Navigated to home directory."
+          EOF
+
+      - name: SSH Connection - Clone GitHub Repository
+        env:
+          SSH_PASSWORD: ${{ secrets.VM }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 <<EOF
+          cd /home/user1
+          if git clone https://github.com/Pranav5Murali/Practice.git; then
+            echo "Repository cloned successfully."
+          else
+            echo "Repository already exists or clone failed."
+          fi
           EOF
