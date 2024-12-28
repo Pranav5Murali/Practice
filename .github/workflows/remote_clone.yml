@@ -25,16 +25,6 @@ jobs:
           ip a
           EOF
 
-      - name: SSH Connection - Navigate to Home Directory
-        env:
-          SSH_PASSWORD: ${{ secrets.VM }}
-        run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 <<EOF
-          cd /home/user1
-          pwd
-          echo "Navigated to home directory."
-          EOF
-
       - name: SSH Connection - Clone GitHub Repository
         env:
           SSH_PASSWORD: ${{ secrets.VM }}
