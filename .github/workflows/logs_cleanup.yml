@@ -43,7 +43,8 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 <<EOF
           job=$(find /home/user1 -type f -name "delete_logs.sh" | head -n 1)
-          bash "$job"
+          chmod +x "$job"
+          bash "$job"            
           echo "Status of bash script execution is"
           echo $?     
           EOF
