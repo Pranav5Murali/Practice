@@ -1,6 +1,6 @@
 name: Remote Prechecks Workflow Bash1
 
-on:
+#on:
   push:
     branches:
       - Ubuntu
