@@ -22,7 +22,7 @@ jobs:
           ip a
           EOF
 
-      - name: SSH Connection - Clone GitHub Repository1
+      - name: SSH Connection - Clone GitHub Repository1a
         env:
           SSH_PASSWORD: ${{ secrets.VM }}
         run: |
