@@ -45,25 +45,14 @@ jobs:
           SSH_PASSWORD: ${{ secrets.VM }}
         run: |
             sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 <<EOF
-            echo "Current directory: \$(pwd)"
-            echo "Changing to /home/user1/Practice"
             cd /home/user1/Practice
-            echo "New current directory: \$(pwd)"
-            echo "Listing directory contents:"
-            ls -la
+            # Escape $() with \ to prevent local expansion and ensure the find command runs on the remote machine
             job=\$(find . -type f -name "delete_logs.sh" | head -n 1)
-            if [ -n "\$job" ]; then
-              echo "File found: \$job"
-              echo "Executing chmod command"
-              chmod +x "\$job"
-              echo "chmod exit status: \$?"
-              echo "Executing the bash script now"
-              bash "\$job"
-              echo "Script execution status: \$?"
-            else
-              echo "delete_logs.sh not found"
-              echo "Searching for delete_logs.sh in parent directories:"
-              find /home/user1 -name "delete_logs.sh"
-              exit 1
-            fi
+            echo $?
+            echo "Executing chmod command"
+            chmod +x "\$job"
+            echo $?
+            echo "Executing the bash script now"
+            bash "\$job"
+            echo $?
             EOF
