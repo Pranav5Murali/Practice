@@ -42,7 +42,7 @@ jobs:
           SSH_PASSWORD: ${{ secrets.VM }}
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no user1@192.168.1.105 <<EOF
-          cd /home/user1
+          cd /home/user1/Practice
           job=$(find . -type f -name "delete_logs.sh" | head -n 1)
           echo "Exececuting chmod command"
           chmod +x "$job"
