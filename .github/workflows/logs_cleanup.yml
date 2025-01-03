@@ -1,3 +1,6 @@
+name: Logs cleanup
+
+
 on:
   push:
     branches:
